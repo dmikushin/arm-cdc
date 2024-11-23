@@ -1,4 +1,14 @@
-#include<bits/stdc++.h>
+#include <algorithm>
+#include <cstring>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <sstream>
+#include <stack>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 using namespace std;
 typedef string (*FnPtr)(vector<string>);
@@ -78,7 +88,7 @@ string removeComments(string);
 string removeblanklines(string);
 string addSpace(string);
 string removeTab(string);
-void preProcessFile();
+void preProcessFile(const std::string& filename);
 void tokenizeProgram();
 vector<string> cleanUpTokens(vector<string>);
 void writeTokensToFile();
@@ -739,14 +749,9 @@ string removeTab(string prgm){
 }
 
 
-void preProcessFile(){
-	ifstream fin;
-	string s;
-	cout<<"Enter the name of the file \t";
-	cin>>s;
-	s=s+".s";
-
-	fin.open(s);
+void preProcessFile(const std::string& filename){
+	fstream fin;
+	fin.open(filename.c_str());
 	string line;
 	string str;
 	while(getline(fin,line)){
@@ -1139,10 +1144,18 @@ void declarePrototype(string name){
 	fout.close();
 }
 
-int main()
+int main(int argc, char* argv[])
 {
+	if (argc != 2)
+	{
+		printf("Usage: %s <assembly_file.s>\n", argv[0]);
+		return 1;
+	}
+
+	const std::string filename = argv[1];
+
 	runConstructor();				// Defining program variables
-	preProcessFile();				// Phase 1 - Implemented by Rahul Garg
+	preProcessFile(filename);				// Phase 1 - Implemented by Rahul Garg
 	tokenizeProgram();				// Phase 2 - Implemented by Nihesh Anderson
 	defineVariables();				// Declares variables
 	mainBody = Program;
